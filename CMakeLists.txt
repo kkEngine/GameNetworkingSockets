@@ -35,6 +35,7 @@ endif()
 
 include(FlagsMSVC)
 add_definitions( -DVALVE_CRYPTO_ENABLE_25519 )
+add_compile_definitions(STEAMNETWORKINGSOCKETS_ENABLE_MESSAGE_POOLING)
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 	add_definitions(
 		-D_CRT_SECURE_NO_WARNINGS

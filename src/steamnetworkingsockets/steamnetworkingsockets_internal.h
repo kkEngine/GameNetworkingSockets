@@ -36,7 +36,26 @@
 		static void operator delete( void *p ) noexcept { free( p ); } \
 		static void operator delete[]( void * ) = delete;
 #else
+	#ifdef STEAMNETWORKINGSOCKETS_ENABLE_MESSAGE_POOLING
+		#define STEAMNETWORKINGSOCKETS_DECLARE_MESSAGE_POOL_CHUNK 1024
+		#include <boost/pool/pool.hpp>
+		#include <boost/pool/object_pool.hpp>
+		#define STEAMNETWORKINGSOCKETS_DECLARE_MESSAGE_DATA_POOLING \
+			static constexpr size_t GetMsgObjectChunkSize() { return sizeof(CSteamNetworkingMessage); } \
+			static inline boost::pool<> s_msgObjectPool = boost::pool<>(GetMsgObjectChunkSize()); \
+			void* operator new( size_t s ) noexcept { return s_msgObjectPool.malloc(); } \
+			void* operator new[]( size_t ) = delete; \
+			void operator delete( void *p ) noexcept { s_msgObjectPool.free(p); } \
+			void operator delete[]( void * ) = delete; \
+			static inline size_t s_msgDataPoolChunkSize = STEAMNETWORKINGSOCKETS_DECLARE_MESSAGE_POOL_CHUNK; \
+    		static inline int GetOrderedMallocSize( uint32 cbSize ) { return cbSize / s_msgDataPoolChunkSize + 1; } \
+			static inline boost::pool<> s_msgDataPool = boost::pool<>(s_msgDataPoolChunkSize);
+	#endif
 	#define STEAMNETWORKINGSOCKETS_DECLARE_CLASS_OPERATOR_NEW
+#endif
+
+#ifndef STEAMNETWORKINGSOCKETS_DECLARE_MESSAGE_DATA_POOLING
+	#define STEAMNETWORKINGSOCKETS_DECLARE_MESSAGE_DATA_POOLING
 #endif
 
 // Enable SDR, except in opensource build

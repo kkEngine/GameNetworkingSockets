@@ -82,6 +82,7 @@ class CSteamNetworkingMessage : public SteamNetworkingMessage_t
 {
 public:
 	STEAMNETWORKINGSOCKETS_DECLARE_CLASS_OPERATOR_NEW
+	STEAMNETWORKINGSOCKETS_DECLARE_MESSAGE_DATA_POOLING
 	static CSteamNetworkingMessage *New( uint32 cbSize );
 	static void DefaultFreeData( SteamNetworkingMessage_t *pMsg );
 

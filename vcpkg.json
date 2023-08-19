@@ -4,7 +4,7 @@
 	"version-string": "1.4.0",
 	"description": "A basic transport layer for games.",
 	"homepage": "https://github.com/ValveSoftware/GameNetworkingSockets",
-	"dependencies": [ "protobuf", "openssl" ],
+	"dependencies": [ "protobuf", "openssl", "boost-pool" ],
 	"default-features": [ "openssl" ],
 	"features": {
 		"openssl": {
